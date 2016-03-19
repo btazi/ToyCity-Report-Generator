@@ -1,0 +1,11 @@
+commit b8c7606c6ae40bfa71f4158fb8e2d1986d93f6e1
+Author: Badr Tazi <tasibadr@gmail.com>
+Date:   Fri Mar 18 21:51:38 2016 +0000
+
+    fixed average price for each brand's toys
+
+commit cde26c68c42b91133ef96e0d8c16e984c8282384
+Author: Badr Tazi <tasibadr@gmail.com>
+Date:   Fri Mar 18 03:19:42 2016 +0000
+
+    first commit
