@@ -13,6 +13,7 @@ def setup_files
 end
 
 def create_report
+	$stdout = File.new('report.txt', 'w')
 	def print_heading
 		# Print today's date
 		puts "Today: #{Time.now.strftime("%d/%m/%Y")}"

@@ -1,3 +1,15 @@
+commit 4f61073938b60168c4bd493ce9e3356317e5e5e6
+Author: Badr Tazi <tasibadr@gmail.com>
+Date:   Tue Mar 29 05:21:18 2016 +0100
+
+    refactored the brands section
+
+commit 6790a327aae3caaa5c08437868570107659f24ae
+Author: Badr Tazi <tasibadr@gmail.com>
+Date:   Sat Mar 19 01:34:25 2016 +0000
+
+    refactored the products section
+
 commit b8c7606c6ae40bfa71f4158fb8e2d1986d93f6e1
 Author: Badr Tazi <tasibadr@gmail.com>
 Date:   Fri Mar 18 21:51:38 2016 +0000
