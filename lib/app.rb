@@ -13,21 +13,20 @@ def setup_files
 end
 
 def create_report
-	print_heading
 	def print_heading
 		# Print today's date
-
-	end
-
-	def separator
-		puts "----------------------------------"
+		puts "Today: #{Time.now.strftime("%d/%m/%Y")}"
 	end
 
 	def print_data
 
+		def separator
+			puts "----------------------------------"
+		end
+
 		def make_products_section
 
-			def print_header
+			def print_heading
 				puts "                     _            _       "
 				puts "                    | |          | |      "
 				puts " _ __  _ __ ___   __| |_   _  ___| |_ ___ "
@@ -37,114 +36,161 @@ def create_report
 				puts "| |                                       "
 				puts "|_|                                       "
 			end
-
-			def print_products_data
-
+		
+			def print_info
 				# For each product in the data set:
 				$products_hash["items"].each do |toy|
-
-					def toy_name
+					
+					def print_name(toy)
 						# Print the name of the toy
-						puts "name: #{toy["title"]}"
+						puts toy["title"]
 					end
 
-					def toy_price
+					def retail_price(toy)
+						toy["full-price"]
+					end
+
+					def print_price(toy)
 						# Print the retail price of the toy
-						retail_price = toy["full-price"]
-						puts "retail price: #{retail_price}"
+						puts "retail price: #{retail_price(toy)}"
 					end
 
-					def number_of_purchases
+					def purchases_count(toy)
+						toy["purchases"].length
+					end
+
+					def print_purchases_count(toy)
 						# Calculate and print the total number of purchases
-						number_of_purchases = toy["purchases"].length
-						puts "number of purchases: #{number_of_purchases}"
+						puts "number of purchases: #{purchases_count(toy)}"
 					end
 
-					def sales
-						# Calculate and print the total amount of sales
+					def sales(toy)
 						sales = 0
 						toy["purchases"].each do |p|
 							sales += p["price"]
 						end
-						puts "sales: #{sales}"
+						return sales
 					end
 
-					def average_price
+					def print_sales(toy)
+						# Calculate and print the total amount of sales
+						puts "sales: #{sales(toy)}"
+					end
+
+					def average_price(toy)
+						sales(toy)/purchases_count(toy)
+					end
+					
+					def print_average_price(toy)
 						# Calculate and print the average price the toy sold for
-						average_price = sales/number_of_purchases
-						puts "average_price: #{average_price}"
+						puts "average_price: #{average_price(toy)}"
 					end
 
-					def average_discount
+					def print_average_discount(toy)
 						# Calculate and print the average discount (% or $) based off the average sales price
-						average_discount = (((retail_price.to_f - average_price.to_f)/retail_price.to_f)*100).round(2)
+						average_discount = (((retail_price(toy).to_f - average_price(toy).to_f)/retail_price(toy).to_f)*100).round(2)
 						puts "average discount: #{average_discount}%"		
 					end
 
-					toy_name
-					toy_price
-					number_of_purchases
-					sales
-					average_price
-					average_discount
+					print_name toy
+					print_price toy
+					print_purchases_count toy
+					print_sales toy
+					print_average_price toy
 					separator
 
 				end
-
 			end
 
-			print_header
-			print_products_data
+			print_heading
+			print_info
 		end
 
 		def make_brands_section
-		end
-	end
-end
 
-
-
-
-puts " _                         _     "
-puts "| |                       | |    "
-puts "| |__  _ __ __ _ _ __   __| |___ "
-puts "| '_ \\| '__/ _` | '_ \\ / _` / __|"
-puts "| |_) | | | (_| | | | | (_| \\__ \\"
-puts "|_.__/|_|  \\__,_|_| |_|\\__,_|___/"
-puts
-
-# For each brand in the data set:
-brands = $products_hash["items"].map { |toy| toy["brand"] }.uniq
-brands.each do |brand|
-
-	stock = 0
-	average = 0
-	revenue = 0
-	brand_toys = 0
-	toys = $products_hash["items"]
-	toys.each do |toy|
-		if toy["brand"] == brand
-			stock += toy["stock"]
-			average += toy["full-price"].to_f
-			brand_toys += 1
-			toy["purchases"].each do |purchase|
-				revenue += purchase["price"]
+			def print_heading
+				puts "                                 "
+				puts " _                         _     "
+				puts "| |                       | |    "
+				puts "| |__  _ __ __ _ _ __   __| |___ "
+				puts "| '_ \\| '__/ _` | '_ \\ / _` / __|"
+				puts "| |_) | | | (_| | | | | (_| \\__ \\"
+				puts "|_.__/|_|  \\__,_|_| |_|\\__,_|___/"
+				puts
 			end
+
+			def print_info
+
+				def print_all_brands_info
+				$brands = $products_hash["items"].map { |toy| toy["brand"] }.uniq
+
+					def get_brand_info(brand)
+						@toys = $products_hash["items"].select { |toy| toy["brand"] == brand }
+
+						def get_stock(brand)
+							@toys.inject(0) {|toy_stock, toy| toy_stock += toy["stock"] }
+						end
+
+						def get_average(brand)
+							get_toys_count(brand)
+							average = @toys.inject(0) {|toy_average, toy| toy_average += toy["full-price"].to_f }
+							(average/get_toys_count(brand)).round(2)
+						end
+
+						def get_toys_count(brand)
+							@toys.count
+						end
+
+						def get_revenue(brand)
+							total_revenue = @toys.inject(0) {|revenue, toy|	revenue += toy["purchases"].inject(0) { |toy_revenue, purchase| toy_revenue += purchase["price"]  } }
+							total_revenue.round(2)
+						end
+
+						get_stock(brand)
+						get_average(brand)
+					end
+
+
+					def print_brand_info(brand)
+						# Print the name of the brand
+						puts brand
+						# Count and print the number of the brand's toys we stock
+						puts "stock: #{get_stock(brand)}"
+						# Calculate and print the average price of the brand's toys
+						puts "average price: #{get_average(brand)}"
+						# Calculate and print the total revenue of all the brand's toy sales combined
+						puts "revenue: #{get_revenue(brand)}$"	
+						puts "-----------------------------------"
+					end
+					# For each brand in the data set:
+					
+					$brands.each do |brand|
+						brand = get_brand_info(brand)
+						print_brand_info(brand)
+					end
+
+				end
+
+				print_all_brands_info
+			end
+
+			print_heading
+			print_info
 		end
+
+		make_products_section
+		make_brands_section
 	end
 
-	# Print the name of the brand
-	puts brand
-	# Count and print the number of the brand's toys we stock
-	puts "stock: #{stock}"
-	# Calculate and print the average price of the brand's toys
-	average = (average/brand_toys).round(2)
-	puts "average price: #{average}"
-	# Calculate and print the total revenue of all the brand's toy sales combined
-	puts "revenue: #{revenue.round(2)}$"	
-	puts "-----------------------------------"
+	print_heading
+	print_data
 end
-
-
 
 start
+
+
+
+
+
+
+
