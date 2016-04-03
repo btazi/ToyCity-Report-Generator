@@ -1,3 +1,15 @@
+commit 894edd3aee992314e664d168d080d71cf861b5d7
+Author: Badr Tazi <tasibadr@gmail.com>
+Date:   Sun Apr 3 17:41:42 2016 +0100
+
+    added the 'sales report' heading and refactored the products section
+
+commit 78cf875dd27b72c6eec3d065bf9bfc2d5a2a1ee3
+Author: Badr Tazi <tasibadr@gmail.com>
+Date:   Tue Mar 29 05:32:12 2016 +0100
+
+    output report.txt file
+
 commit 4f61073938b60168c4bd493ce9e3356317e5e5e6
 Author: Badr Tazi <tasibadr@gmail.com>
 Date:   Tue Mar 29 05:21:18 2016 +0100
