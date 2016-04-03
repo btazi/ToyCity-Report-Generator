@@ -13,9 +13,17 @@ def setup_files
 end
 
 def create_report
-	$stdout = File.new('report.txt', 'w')
 	def print_heading
-		# Print today's date
+		$stdout = File.new('report.txt', 'w')
+		puts "   _____       _             _____                       _    "
+		puts "  / ____|     | |           |  __ \\                     | |   "
+		puts " | (___   __ _| | ___  ___  | |__) |___ _ __   ___  _ __| |_  "
+		puts "  \\___ \\ / _` | |/ _ \\/ __| |  _  // _ \\ '_ \\ / _ \\| '__| __| "
+		puts "  ____) | (_| | |  __/\\__ \\ | | \\ \\  __/ |_) | (_) | |  | |_  "
+		puts " |_____/ \\__,_|_|\\___||___/ |_|  \\_\\___| .__/ \\___/|_|   \\__| "
+		puts "                                       | |                    "
+		puts "                                       |_|                    "
+		# Print today's dateVV
 		puts "Today: #{Time.now.strftime("%d/%m/%Y")}"
 	end
 
@@ -27,7 +35,7 @@ def create_report
 
 		def make_products_section
 
-			def print_heading
+			def print_products_heading
 				puts "                     _            _       "
 				puts "                    | |          | |      "
 				puts " _ __  _ __ ___   __| |_   _  ___| |_ ___ "
@@ -40,70 +48,46 @@ def create_report
 		
 			def print_info
 				# For each product in the data set:
-				$products_hash["items"].each do |toy|
 					
-					def print_name(toy)
-						# Print the name of the toy
-						puts toy["title"]
-					end
-
-					def retail_price(toy)
-						toy["full-price"]
-					end
-
-					def print_price(toy)
-						# Print the retail price of the toy
-						puts "retail price: #{retail_price(toy)}"
-					end
-
-					def purchases_count(toy)
-						toy["purchases"].length
-					end
-
-					def print_purchases_count(toy)
-						# Calculate and print the total number of purchases
-						puts "number of purchases: #{purchases_count(toy)}"
-					end
-
-					def sales(toy)
-						sales = 0
-						toy["purchases"].each do |p|
-							sales += p["price"]
-						end
-						return sales
-					end
-
-					def print_sales(toy)
-						# Calculate and print the total amount of sales
-						puts "sales: #{sales(toy)}"
-					end
 
 					def average_price(toy)
-						sales(toy)/purchases_count(toy)
-					end
-					
-					def print_average_price(toy)
-						# Calculate and print the average price the toy sold for
-						puts "average_price: #{average_price(toy)}"
+						sales = toy["purchases"].inject(0) {|total, purchase| total += purchase["price"]}
+						count = toy["purchases"].count
+						sales/count
 					end
 
-					def print_average_discount(toy)
-						# Calculate and print the average discount (% or $) based off the average sales price
-						average_discount = (((retail_price(toy).to_f - average_price(toy).to_f)/retail_price(toy).to_f)*100).round(2)
-						puts "average discount: #{average_discount}%"		
+					def average_discount(toy)
+						retail = toy["full-price"]
+						average = average_price toy
+						(((retail.to_f - average.to_f)/retail.to_f)*100).round(2)
 					end
 
-					print_name toy
-					print_price toy
-					print_purchases_count toy
-					print_sales toy
-					print_average_price toy
-					separator
+					def products_data
+						$products_hash["items"].each do |toy|
+							toy_result = calculate_products_data(toy)
+							print_products_data(toy_result)
+						end
+					end
 
-				end
+					def calculate_products_data(toy)
+						toy_data = {name: toy["title"], retail: toy["full-price"], sales: toy["purchases"].inject(0) {|result, purchase| result += purchase["price"] }, count: toy["purchases"].count, average_price: average_price(toy), average_discount: average_discount(toy) }
+						toy_data
+					end
+
+					def print_products_data(toy_result)
+						puts "#{toy_result[:name]}"
+						puts "retail price: #{toy_result[:retail]}"
+						puts "number of purchases: #{toy_result[:count]}"
+						puts "sales: #{toy_result[:sales]}"
+						puts "average price: #{toy_result[:average_price]}$"
+						puts "average discount: #{toy_result[:average_discount]}%"
+						separator
+					end
+
+					products_data
 			end
 
-			print_heading
+			print_products_heading
 			print_info
 		end
 
